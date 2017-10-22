@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: c5582691139edaf48975c399a2d71f06
+labels:
+- classic
+- grid
+- tile
+- maze
+- character
+- capsule
+- sphere
+- circle
+- physics2d
+- box
+- physics
+- cast
+- collision
+- movement
+- move
+timeCreated: 18446744011573954816
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
