@@ -23,14 +23,15 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		anim = GetComponent<Animator>();
+		anim.speed = 0.25f * speed;
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {		
-		GetInput();
-		Action();
-		Move();
+	void Update () {		
+		GetInputMobile();
+		Action();		
 		DrawDebug();
+		Move();
 	}
 
 	///<summary>
@@ -99,6 +100,23 @@ public class PlayerMovement : MonoBehaviour {
 		inputPause = Input.GetButton("Pause");
 	}
 
+	void GetInputMobile(){
+		//input guarda la entrada para el movimiento horizontal
+		input = Input.acceleration.x;
+		//inputAction guarda la pulsacion del boton cambiar gravedad
+		//Esta implementado de forma que la accion solo puede realizarse entre movimientos, por lo que si se pulsa en medio de uno 
+		//se guarda el valor para ejecutarse al acabar este
+		inputAction = false;
+		if(Input.touchCount == 1){
+			TouchPhase touch = Input.touches[0].phase;
+			if(touch == TouchPhase.Ended && touch != TouchPhase.Canceled){
+				inputAction = true;
+			}
+		}
+		//input para guardar la entrada de activar/desactivar la pausa
+		inputPause = Input.GetButton("Pause");
+	}
+
 	///<sumary>
 	/// Usando la funcion CanMoveTo() se comprueba si hay una colision en el tile justo bajo el personaje (en este caso se considera el sentido
 	/// de la gravedad para determinar cual es el tile "bajo" el personaje)
@@ -136,6 +154,7 @@ public class PlayerMovement : MonoBehaviour {
 			CheckGround();
 			movement = Vector2.zero;			
 			if(grounded){
+				RepositionCamera();				
 				if(input != 0 && !action){
 					movement = new Vector2(input, 0f);				
 					StartCoroutine(SmoothGridMoveCoroutine(movement, spd, true));		
@@ -152,8 +171,12 @@ public class PlayerMovement : MonoBehaviour {
 	
 	private void ManageSprite(){
 		anim.SetBool("inverted", inverted);
-		anim.SetBool("moving", movement.x != 0);
+		anim.SetBool("moving", movement.x != 0 && isMoving);
 		anim.SetInteger("direction", (int)Mathf.Sign(movement.x));
+	}
+
+	void RepositionCamera(){
+		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().ChangeY(transform.position.y);
 	}
 
 	void DrawDebug(){

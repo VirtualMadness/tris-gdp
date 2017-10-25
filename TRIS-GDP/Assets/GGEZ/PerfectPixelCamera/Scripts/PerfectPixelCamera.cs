@@ -94,6 +94,7 @@ void LateUpdate ()
     var pixelRect = camera.pixelRect;
     float texturePixelsPerWorldUnit = this.TexturePixelsPerWorldUnit;
     float zoomFactor = Mathf.Max (1f, Mathf.Ceil ((1f * pixelRect.height) / (camera.orthographicSize * 2f * texturePixelsPerWorldUnit)));
+    //zoomFactor = 5.625f;
     float halfWidth  = (1f * pixelRect.width)  / (zoomFactor * 2f * texturePixelsPerWorldUnit);
     float halfHeight = (1f * pixelRect.height) / (zoomFactor * 2f * texturePixelsPerWorldUnit);
     float snapSizeWorldUnits = 1f / (zoomFactor * texturePixelsPerWorldUnit);
