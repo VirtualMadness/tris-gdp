@@ -27,8 +27,10 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {		
+	void Update () {
+        		
 		GetInputMobile();
+        //GetInput();
 		Action();		
 		DrawDebug();
 		Move();
@@ -102,7 +104,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	void GetInputMobile(){
 		//input guarda la entrada para el movimiento horizontal
-		input = Input.acceleration.x;
+		input = Mathf.Abs(Input.acceleration.x) > 0.05f ? Input.acceleration.x: 0f;
 		//inputAction guarda la pulsacion del boton cambiar gravedad
 		//Esta implementado de forma que la accion solo puede realizarse entre movimientos, por lo que si se pulsa en medio de uno 
 		//se guarda el valor para ejecutarse al acabar este
