@@ -44,3 +44,6 @@ TagManager:
   - name: Player
     uniqueID: 84075115
     locked: 0
+  - name: SpaceShip
+    uniqueID: 2906513933
+    locked: 0

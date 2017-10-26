@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour {
 	[SerializeField] public float speed = 4f;
 	[SerializeField] public bool debug;	
-	[SerializeField] public bool canChangeGravity;
+	[SerializeField] public bool canChangeGravity;	
 
 	float input;
 	bool inputAction;
@@ -18,17 +18,19 @@ public class PlayerMovement : MonoBehaviour {
 	Vector2 movement;
 	Animator anim;
 	bool inverted;
+	DeviceType actualDevice;
 
 
 	// Use this for initialization
 	void Awake () {
 		anim = GetComponent<Animator>();
 		anim.speed = 0.25f * speed;
+		actualDevice = SystemInfo.deviceType;
 	}
 	
 	// Update is called once per frame
-	void Update () {		
-		GetInputMobile();
+	void Update () {				
+		GetInput();
 		Action();		
 		DrawDebug();
 		Move();
@@ -91,31 +93,29 @@ public class PlayerMovement : MonoBehaviour {
 
 	void GetInput(){
 		//input guarda la entrada para el movimiento horizontal
-		input = Input.GetAxisRaw("Horizontal");
-		//inputAction guarda la pulsacion del boton cambiar gravedad
-		//Esta implementado de forma que la accion solo puede realizarse entre movimientos, por lo que si se pulsa en medio de uno 
-		//se guarda el valor para ejecutarse al acabar este
-		inputAction = Input.GetButton("Action");
-		//input para guardar la entrada de activar/desactivar la pausa
-		inputPause = Input.GetButton("Pause");
-	}
 
-	void GetInputMobile(){
-		//input guarda la entrada para el movimiento horizontal
-		input = Input.acceleration.x;
 		//inputAction guarda la pulsacion del boton cambiar gravedad
 		//Esta implementado de forma que la accion solo puede realizarse entre movimientos, por lo que si se pulsa en medio de uno 
 		//se guarda el valor para ejecutarse al acabar este
-		inputAction = false;
-		if(Input.touchCount == 1){
+
+		//input para guardar la entrada de activar/desactivar la pausa
+		if(actualDevice == DeviceType.Handheld){
+			input = Mathf.Abs(Input.acceleration.x) >= 0.3f? Input.acceleration.x: 0f;	
+
+			inputAction = false;
+			if(Input.touchCount == 1){
 			TouchPhase touch = Input.touches[0].phase;
 			if(touch == TouchPhase.Ended && touch != TouchPhase.Canceled){
 				inputAction = true;
 			}
 		}
-		//input para guardar la entrada de activar/desactivar la pausa
-		inputPause = Input.GetButton("Pause");
-	}
+
+		}else{
+			input = Input.GetAxisRaw("Horizontal");		
+			inputAction = Input.GetButton("Action");		
+			inputPause = Input.GetButton("Pause");
+		}		
+	}	
 
 	///<sumary>
 	/// Usando la funcion CanMoveTo() se comprueba si hay una colision en el tile justo bajo el personaje (en este caso se considera el sentido
