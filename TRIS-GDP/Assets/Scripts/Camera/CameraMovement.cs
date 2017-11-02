@@ -8,6 +8,17 @@ public class CameraMovement : MonoBehaviour {
 	GameObject target;
 	float actualY;
 
+    public enum ShakeLevel
+    {
+        low = 1,
+        medium = 2,
+        high = 3
+    }
+
+    public float maxShake = 0.2f;
+
+    private float shake = 0f;
+
 	// Use this for initialization
 	void Start () {
 		target = GameObject.FindGameObjectWithTag("Player");
@@ -16,10 +27,17 @@ public class CameraMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector3 camPos = new Vector3(0f, actualY, transform.position.z);
-		transform.position = Vector3.Lerp(transform.position, camPos, smoothing * Time.deltaTime);
+		transform.position = Vector3.Lerp(transform.position, camPos, smoothing * Time.deltaTime) + new Vector3(Mathf.Sign(Random.Range(-1, 1))*shake, Random.Range(-1, 1) *shake, 0);
+
+        shake = Mathf.Lerp(shake, 0, 0.3f);
 	}
 
 	public void ChangeY(float newY){
 		actualY = newY;
 	}
+
+    public void Shake()
+    {
+        shake += maxShake;
+    }
 }

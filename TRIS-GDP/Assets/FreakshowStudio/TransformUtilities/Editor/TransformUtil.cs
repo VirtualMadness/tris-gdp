@@ -34,7 +34,7 @@ public partial class TransformUtil : EditorWindow
 	private static void SettingsGUI()
 	{
 		TransformUtil tu = (TransformUtil) GetWindow<TransformUtil>();
-		tu.title = "Transform Util";
+		tu.titleContent = new GUIContent("Transform Util");
 		tu.Show();
 	}
 	
