@@ -8,13 +8,8 @@ public class CameraMovement : MonoBehaviour {
 	GameObject target;
 	float actualY;
 
-    public enum ShakeLevel
-    {
-        low = 1,
-        medium = 2,
-        high = 3
-    }
-
+	[Space]
+	[Header("ScreenShake")]
     public float maxShake = 0.2f;
 
     private float shake = 0f;
