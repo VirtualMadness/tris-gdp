@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour {
 	public float smoothing = 2;
 	public float maxWidth = 160/8f;
-	GameObject target;
+	//GameObject target;
 	float actualY;
 
 	[Space]
@@ -16,7 +16,7 @@ public class CameraMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		target = GameObject.FindGameObjectWithTag("Player");
+		//target = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update is called once per frame
@@ -35,4 +35,11 @@ public class CameraMovement : MonoBehaviour {
     {
         shake += maxShake;
     }
+}
+
+public enum Layer
+{
+    ground = 8,
+    tris = 9,
+    ignoreRayCast = 2
 }

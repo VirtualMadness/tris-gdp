@@ -98,11 +98,11 @@ public class PlayerMovement : MonoBehaviour {
 		//inputAction guarda la pulsacion del boton cambiar gravedad
 		//Esta implementado de forma que la accion solo puede realizarse entre movimientos, por lo que si se pulsa en medio de uno 
 		//se guarda el valor para ejecutarse al acabar este
-        accel = new Vector3(Input.acceleration.x, Input.acceleration.y, Input.acceleration.z);
+        //accel = new Vector3(Input.acceleration.x, Input.acceleration.y, Input.acceleration.z);
 
 		//input para guardar la entrada de activar/desactivar la pausa
 		if(actualDevice == DeviceType.Handheld){
-			input = Mathf.Abs(Input.acceleration.x) >= 0.3f? Mathf.Sign(Input.acceleration.x): 0f;	
+			input = Mathf.Abs(Input.acceleration.x) >= 0.15f? Mathf.Sign(Input.acceleration.x): 0f;	
 
 			inputAction = false;
 			if(Input.touchCount == 1){
@@ -114,8 +114,8 @@ public class PlayerMovement : MonoBehaviour {
 
 		}else{
 			input = Input.GetAxisRaw("Horizontal");		
-			inputAction = Input.GetButton("Action");		
-			inputPause = Input.GetButton("Pause");
+			inputAction = Input.GetButtonDown("Action");
+			//inputPause = Input.GetButton("Pause");
 		}		
 	}	
 
