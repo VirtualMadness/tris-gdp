@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public class PlayerMovement : MonoBehaviour {
 	//Vector2 position;
 	Vector2 movement;
 	Animator anim;
-	bool inverted;
+	public bool inverted;
 	public DeviceType actualDevice;
 
     Vector3 accel;
@@ -37,11 +38,11 @@ public class PlayerMovement : MonoBehaviour {
 		Move();
 	}
 
-	///<summary>
-	/// Comprueba si hay una colision en la direccion del moviento que pasemos como argumento y devuelve un boolean con true si puede realizarse
-	/// la traslacion sin problemas o false si encuentra algun obstaculo en medio
-	///</summary>
-	private bool CanMoveTo(Vector2 motion){
+    ///<summary>
+    /// Comprueba si hay una colision en la direccion del moviento que pasemos como argumento y devuelve un boolean con true si puede realizarse
+    /// la traslacion sin problemas o false si encuentra algun obstaculo en medio
+    ///</summary>
+    private bool CanMoveTo(Vector2 motion){
 		RaycastHit2D hit;
 		hit = Physics2D.Raycast((Vector2)transform.position, motion, motion.magnitude, LayerMask.GetMask("Ground"));
 		if(hit.collider != null){
@@ -177,8 +178,24 @@ public class PlayerMovement : MonoBehaviour {
 		anim.SetInteger("direction", (int)Mathf.Sign(movement.x));
 	}
 
+    public void ResetToPosition(Vector2 pos, bool inverted)
+    {
+        StopAllCoroutines();
+        this.transform.position = pos;
+        this.inverted = inverted;
+        this.isMoving = false;
+        this.ManageSprite();
+    }
+
+    internal void ResetPositionToActiveCheckpoint()
+    {
+        LevelController lv = GameObject.Find("LevelController").GetComponent<LevelController>();
+        Physics2D.gravity = lv.activeCP.isInverted()?-lv.startingGravity:lv.startingGravity;
+        ResetToPosition(lv.activeCP.gameObject.transform.position, lv.activeCP.isInverted());
+    }
+
 	void RepositionCamera(){
-		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().ChangeY(transform.position.y);
+		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().ChangeY(inverted?transform.position.y - 0.5f : transform.position.y + 0.5f);
 	}
 
 	void DrawDebug(){

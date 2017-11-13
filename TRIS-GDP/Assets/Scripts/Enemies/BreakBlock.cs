@@ -19,17 +19,13 @@ public class BreakBlock : MonoBehaviour
 
     void Start()
     {
-
         state = State.ready;
         anim = GetComponent<Animator>();
-        
     }
 
-
-    void Update()
+    void OnTriggerEnter2D(Collider2D other)
     {
-
-        if(state == State.ready && trigger.IsTouchingLayers(Physics2D.GetLayerCollisionMask(9)))
+        if(state == State.ready && other.gameObject.CompareTag(GameObject.Find("TRIS").tag))
         {
             this.breaking();
         }
@@ -44,13 +40,13 @@ public class BreakBlock : MonoBehaviour
 
     private void broken()
     {
-        this.gameObject.layer = Layer.ignoreRayCast.GetHashCode();
+        this.gameObject.layer = Layer.IGNORE_RAYCAST;
         state = State.broken;
     }
 
     private void restored()
     {
-        this.gameObject.layer = Layer.ground.GetHashCode();
+        this.gameObject.layer = Layer.GROUND;
         state = State.ready;
     }
 

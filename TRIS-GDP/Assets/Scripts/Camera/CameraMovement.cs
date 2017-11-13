@@ -36,10 +36,3 @@ public class CameraMovement : MonoBehaviour {
         shake += maxShake;
     }
 }
-
-public enum Layer
-{
-    ground = 8,
-    tris = 9,
-    ignoreRayCast = 2
-}
