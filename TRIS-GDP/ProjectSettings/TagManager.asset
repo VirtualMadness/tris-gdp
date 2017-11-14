@@ -14,8 +14,8 @@ TagManager:
   - 
   - 
   - Ground
-  - 
-  - 
+  - TRIS
+  - Damage
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
     locked: 0
   - name: SpaceShip
     uniqueID: 2906513933
+    locked: 0
+  - name: UI
+    uniqueID: 971241999
     locked: 0
