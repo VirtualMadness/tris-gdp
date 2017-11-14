@@ -8,9 +8,16 @@ public class CameraMovement : MonoBehaviour {
 	GameObject target;
 	float actualY;
 
-	// Use this for initialization
-	void Start () {
+	public static Color BLACK = new Color(33f/255f, 24f/255f, 3f/255f);
+	public static Color PINK = new Color(179f/255f, 112f/255f, 116f/255f);
+	public static Color GREEN = new Color(31f/255f, 94f/255f, 96f/255f);
+	public static Color WHITE = new Color(215f/255f, 239f/255f, 222f/255f);
+
+
+    // Use this for initialization
+    void Start () {
 		target = GameObject.FindGameObjectWithTag("Player");
+		GetComponent<Camera>().backgroundColor = PINK;
 	}
 	
 	// Update is called once per frame

@@ -1,8 +1,10 @@
-﻿Shader "Unlit/ColorVariation"
+﻿Shader "Example/ColorVariation"
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
+		[PerRendererData]_MainTex ("Texture", 2D) = "white" {}
+		_SwapTex("Color Data", 2D) = "transparent" {}
+		_paletteIndex("PaleteIndex", int) = 0
 	}
 	SubShader
 	{
@@ -48,8 +50,9 @@
 			{
 				// sample the texture
 				//fixed4 col = tex2D(_MainTex, i.uv);
-				fixed4 col = fixed4(1,0,0,1);
-				// apply fog
+				//col = fixed4(col[0], col[1], col[2], col[3]);
+				fixed4 col = fixed4(0,0,1,0);
+				//apply fog
 				UNITY_APPLY_FOG(i.fogCoord, col);
 				return col;
 			}

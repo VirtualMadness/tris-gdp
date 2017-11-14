@@ -138,6 +138,10 @@ public class PixelPerfectCamera : MonoBehaviour {
         return verticalFOV / 2;
     }
 
+    public float getYOffset(){        
+        return cam.orthographicSize;
+    }
+
     public void adjustCameraFOV()
     {
         if (cam == null)
@@ -171,7 +175,6 @@ public class PixelPerfectCamera : MonoBehaviour {
     {
         adjustCameraFOV();
     }
-
 
     void OnValidate () {
         maxCameraHalfWidth = Math.Max(maxCameraHalfWidth, 0.01f);
@@ -361,8 +364,6 @@ public class PixelPerfectCameraEditor : Editor
     private string makeBold(string str)
     {
         return "<b>" + str + "</b>";
-    }
-
-
+    }   
 }
 #endif

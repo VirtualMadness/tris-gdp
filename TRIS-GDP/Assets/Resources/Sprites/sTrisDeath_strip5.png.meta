@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: bb638f1b0d281cd4b8e12c31209e0183
-timeCreated: 1508708504
+guid: 4c7b4aafe8812a04fb56b1980a61e48f
+timeCreated: 1510673971
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: sTrisWalk_strip5_0
-    21300002: sTrisWalk_strip5_1
-    21300004: sTrisWalk_strip5_2
-    21300006: sTrisWalk_strip5_3
-    21300008: sTrisWalk_strip5_4
+    21300000: sTrisDeath_strip5_0
+    21300002: sTrisDeath_strip5_1
+    21300004: sTrisDeath_strip5_2
+    21300006: sTrisDeath_strip5_3
+    21300008: sTrisDeath_strip5_4
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -27,7 +27,7 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 1
+  isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -37,7 +37,7 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: 0
+    aniso: -1
     mipBias: -1
     wrapU: 1
     wrapV: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sTrisWalk_strip5_0
+      name: sTrisDeath_strip5_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 8
-        height: 8
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,13 +124,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: sTrisWalk_strip5_1
+      name: sTrisDeath_strip5_1
       rect:
         serializedVersion: 2
-        x: 8
+        x: 10
         y: 0
-        width: 8
-        height: 8
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,13 +138,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: sTrisWalk_strip5_2
+      name: sTrisDeath_strip5_2
       rect:
         serializedVersion: 2
-        x: 16
+        x: 20
         y: 0
-        width: 8
-        height: 8
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,13 +152,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: sTrisWalk_strip5_3
+      name: sTrisDeath_strip5_3
       rect:
         serializedVersion: 2
-        x: 24
+        x: 30
         y: 0
-        width: 8
-        height: 8
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,13 +166,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: sTrisWalk_strip5_4
+      name: sTrisDeath_strip5_4
       rect:
         serializedVersion: 2
-        x: 32
+        x: 40
         y: 0
-        width: 8
-        height: 8
+        width: 10
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -181,7 +181,7 @@ TextureImporter:
       tessellationDetail: 0
     outline: []
     physicsShape: []
-  spritePackingTag: Walk
+  spritePackingTag: death
   userData: 
   assetBundleName: 
   assetBundleVariant: 

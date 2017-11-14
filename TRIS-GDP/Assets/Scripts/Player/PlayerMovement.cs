@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField] public float speed = 4f;
 	[SerializeField] public bool debug;	
 	[SerializeField] public bool canChangeGravity;	
+	[SerializeField] public DeviceType actualDevice;
+	[SerializeField] public float movementThreshold = 0.3f;
 
 	float input;
 	bool inputAction;
@@ -14,26 +16,37 @@ public class PlayerMovement : MonoBehaviour {
 	bool action;
 	bool isMoving = false;
 	bool grounded = false;
+	bool dead = false;
+	int gravityCoolDown = 0;
 	//Vector2 position;
 	Vector2 movement;
 	Animator anim;
+	Camera mainCam;
 	bool inverted;
-	DeviceType actualDevice;
 
+	bool accel = true;
 
 	// Use this for initialization
 	void Awake () {
 		anim = GetComponent<Animator>();
 		anim.speed = 0.25f * speed;
 		actualDevice = SystemInfo.deviceType;
+		Input.gyro.enabled = true;
+		mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
+		if(debug){
+			actualDevice = DeviceType.Handheld;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {				
 		GetInput();
 		Action();		
-		DrawDebug();
+		CheckDeath();		
 		Move();
+
+		DrawDebug();
 	}
 
 	///<summary>
@@ -93,22 +106,25 @@ public class PlayerMovement : MonoBehaviour {
 
 	void GetInput(){
 		//input guarda la entrada para el movimiento horizontal
-
 		//inputAction guarda la pulsacion del boton cambiar gravedad
 		//Esta implementado de forma que la accion solo puede realizarse entre movimientos, por lo que si se pulsa en medio de uno 
 		//se guarda el valor para ejecutarse al acabar este
-
 		//input para guardar la entrada de activar/desactivar la pausa
+
 		if(actualDevice == DeviceType.Handheld){
-			input = Mathf.Abs(Input.acceleration.x) >= 0.3f? Input.acceleration.x: 0f;	
+			if(accel){
+				input = Mathf.Abs(Input.acceleration.x) >= movementThreshold? Mathf.Sign(Input.acceleration.x): 0f;	
+			}else{
+				input = Mathf.Abs(Input.gyro.rotationRateUnbiased.x) >= movementThreshold? Mathf.Sign(Input.gyro.rotationRateUnbiased.x): 0f;	
+			}
 
 			inputAction = false;
 			if(Input.touchCount == 1){
-			TouchPhase touch = Input.touches[0].phase;
-			if(touch == TouchPhase.Ended && touch != TouchPhase.Canceled){
-				inputAction = true;
+				TouchPhase touch = Input.touches[0].phase;
+				if(touch == TouchPhase.Ended && touch != TouchPhase.Canceled){
+					inputAction = true;
+				}
 			}
-		}
 
 		}else{
 			input = Input.GetAxisRaw("Horizontal");		
@@ -139,34 +155,42 @@ public class PlayerMovement : MonoBehaviour {
 		if(!isMoving){
 			CheckGround();
 			if(grounded){
-				if(action){
+				if(action && gravityCoolDown == 0){
 					Physics2D.gravity *= -1;
-					inverted = Mathf.Sign(Physics2D.gravity.y) > 0? true: false;					
+					inverted = Mathf.Sign(Physics2D.gravity.y) > 0? true: false;	
+					gravityCoolDown = 16;				
 				}
 			}			
 		}
+		gravityCoolDown = gravityCoolDown-1 < 0? 0: gravityCoolDown-1;
 	}
 
-	void Move(){
-		float spd = speed;
-		
-		if(!isMoving){
+	void Move(){	
+		ManageSprite();	
+		if(!dead && !isMoving){
 			CheckGround();
 			movement = Vector2.zero;			
 			if(grounded){
 				RepositionCamera();				
 				if(input != 0 && !action){
 					movement = new Vector2(input, 0f);				
-					StartCoroutine(SmoothGridMoveCoroutine(movement, spd, true));		
+					StartCoroutine(SmoothGridMoveCoroutine(movement, speed, true));		
 				}
 			}else{
 				movement = new Vector2(0f, Mathf.Sign(Physics2D.gravity.y));
-				spd = Physics2D.gravity.y;
-				StartCoroutine(SmoothGridMoveCoroutine(movement, spd, true));		
+				StartCoroutine(SmoothGridMoveCoroutine(movement, Physics2D.gravity.y, true));		
 			}		
 			action = false;	
+		}		
+	}
+
+	private void CheckDeath(){
+		float yOffset = mainCam.GetComponentInParent<PixelPerfectCamera>().getYOffset();
+		Debug.DrawLine(mainCam.transform.position - new Vector3(100, yOffset, -10), mainCam.transform.position - new Vector3(-100, yOffset, -10), Color.yellow);
+		Debug.DrawLine(mainCam.transform.position + new Vector3(-100, yOffset, 10), mainCam.transform.position + new Vector3(100, yOffset, 10), Color.yellow);
+		if(transform.position.y < mainCam.transform.position.y - yOffset || transform.position.y > mainCam.transform.position.y + yOffset){
+			//dead = true;
 		}
-		ManageSprite();
 	}
 	
 	private void ManageSprite(){
@@ -176,12 +200,22 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void RepositionCamera(){
-		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().ChangeY(transform.position.y);
+		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().ChangeY(transform.position.y + 0.5f * Mathf.Sign(Physics2D.gravity.y));
 	}
 
 	void DrawDebug(){
 		if(!debug)
 			return;
 		Debug.DrawRay(transform.position, Vector2.up * Mathf.Sign(Physics2D.gravity.y) * (1f), Color.red);
+	}
+
+
+	//metodos debug
+	public void setAccel(bool state){
+		accel = state;
+	}
+
+	public void setThreshold(float val){
+		movementThreshold = val;
 	}
 }
