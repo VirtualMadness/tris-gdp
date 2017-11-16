@@ -12,15 +12,11 @@ public class DoDamage : MonoBehaviour {
     {
 		player = GameObject.FindGameObjectWithTag("Player");
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
 
     void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log("Contact");
-        if(other.gameObject.CompareTag(player.tag))
+        if(other.gameObject.CompareTag("Player"))
         {
             Debug.Log("Damage");
             resetScene();
