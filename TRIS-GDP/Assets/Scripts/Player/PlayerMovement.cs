@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField] public bool canChangeGravity;	
 	[SerializeField] public DeviceType actualDevice;
 	[SerializeField] public float movementThreshold = 0.3f;
+	[SerializeField] public CheckPoint actualCheckpoint;
 
 	float input;
 	bool inputAction;
@@ -188,13 +189,45 @@ public class PlayerMovement : MonoBehaviour {
 		float yOffset = mainCam.GetComponentInParent<PixelPerfectCamera>().getYOffset();
 		Debug.DrawLine(mainCam.transform.position - new Vector3(100, yOffset, -10), mainCam.transform.position - new Vector3(-100, yOffset, -10), Color.yellow);
 		Debug.DrawLine(mainCam.transform.position + new Vector3(-100, yOffset, 10), mainCam.transform.position + new Vector3(100, yOffset, 10), Color.yellow);
-		if(transform.position.y < mainCam.transform.position.y - yOffset || transform.position.y > mainCam.transform.position.y + yOffset){
-			//dead = true;
+		float pivotOffset = 0.5f;
+		if(transform.position.y - pivotOffset < mainCam.transform.position.y - yOffset || transform.position.y + pivotOffset > mainCam.transform.position.y + yOffset){
+			Die();
 		}
+	}
+
+	public void Die(){
+		if(dead)
+			return;
+		dead = true;
+		StopAllCoroutines();
+		isMoving = false;
+		Time.timeScale = 0.4f;
+		ManageSprite();
+		for(int i = 0; i < 1; i++){
+			mainCam.GetComponentInParent<CameraMovement>().Shake();
+		}
+	}
+
+	private void Restart(){
+		dead = false;		
+		Time.timeScale = 1f;	
+		ResetPositionToActiveCheckpoint();
+		ManageSprite();
 	}
 	
 	private void ManageSprite(){
-		anim.SetBool("inverted", inverted);
+		SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
+		if(inverted){
+			if(!mySprite.flipY){
+				mySprite.flipY = true;
+			}
+		}else{
+			if(mySprite.flipY){
+				mySprite.flipY = false;
+			}
+		}
+		anim.SetBool("dead", dead);
+		//anim.SetBool("inverted", inverted);
 		anim.SetBool("moving", movement.x != 0 && isMoving);
 		anim.SetInteger("direction", (int)Mathf.Sign(movement.x));
 	}
@@ -209,6 +242,25 @@ public class PlayerMovement : MonoBehaviour {
 		Debug.DrawRay(transform.position, Vector2.up * Mathf.Sign(Physics2D.gravity.y) * (1f), Color.red);
 	}
 
+	public void ResetToPosition(Vector2 pos, bool inverted)
+    {		
+        this.inverted = inverted;
+        this.transform.position = pos;
+    }
+
+    internal void ResetPositionToActiveCheckpoint()
+    {
+        /*LevelController lv = GameObject.Find("LevelController").GetComponent<LevelController>();
+        Physics2D.gravity = lv.activeCP.isInverted()?-lv.startingGravity:lv.startingGravity;
+		ResetToPosition(lv.activeCP.gameObject.transform.position, lv.activeCP.isInverted());*/
+		Physics2D.gravity = new Vector3 (0, actualCheckpoint.isInverted()? Mathf.Abs(Physics2D.gravity.y): -Mathf.Abs(Physics2D.gravity.y), 0);
+        ResetToPosition(actualCheckpoint.transform.position, actualCheckpoint.isInverted());
+    }
+
+	internal void refreshCheckpoint(CheckPoint cp){
+		actualCheckpoint = cp;
+	}
+
 
 	//metodos debug
 	public void setAccel(bool state){
@@ -218,4 +270,6 @@ public class PlayerMovement : MonoBehaviour {
 	public void setThreshold(float val){
 		movementThreshold = val;
 	}
+
+
 }

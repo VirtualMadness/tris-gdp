@@ -28,13 +28,8 @@ public class DoDamage : MonoBehaviour {
     }
     void resetScene()
     {
-        PlayerMovement pm = player.GetComponent<PlayerMovement>();
-        CameraMovement cam = GameObject.FindWithTag("MainCamera").GetComponent<CameraMovement>();
+        PlayerMovement pm = player.GetComponent<PlayerMovement>();       
 
-        cam.Shake();
-        cam.Shake();
-        cam.Shake();
-
-        pm.ResetPositionToActiveCheckpoint();
+        pm.Die();
     }
 }

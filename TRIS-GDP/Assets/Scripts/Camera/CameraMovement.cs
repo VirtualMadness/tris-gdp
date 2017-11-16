@@ -16,13 +16,14 @@ public class CameraMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		actualY = transform..positiony;
 		//target = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		Vector3 camPos = new Vector3(0f, actualY, transform.position.z);
-		transform.position = Vector3.Lerp(transform.position, camPos, smoothing * Time.deltaTime) + new Vector3(Mathf.Sign(Random.Range(-1, 1))*shake, Random.Range(-1, 1) *shake, 0);
+		transform.position = Vector3.Lerp(transform.position, camPos, smoothing * Time.deltaTime) + new Vector3(Mathf.Sign(Random.Range(-1, 1))*shake, Mathf.Sign(Random.Range(-1, 1)) *shake, 0);
 
         shake = Mathf.Lerp(shake, 0, 0.3f);
 	}

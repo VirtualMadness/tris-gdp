@@ -5,9 +5,9 @@ using UnityEngine;
 public class LevelController : MonoBehaviour {
 
 	// Use this for initialization
-    public Vector2 startingGravity = new Vector2(0, -16);
-    public CheckPoint activeCP; 
+    public Vector2 startingGravity = new Vector2(0, -16);    
     public Drop[] drops;
+    public CheckPoint[] checkpoints;
 
 	void Start () 
     {
