@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class BreakBlock : MonoBehaviour
 {
-
-    public Collider2D trigger;
     private enum State
     {
         ready = 0,
@@ -20,14 +18,35 @@ public class BreakBlock : MonoBehaviour
     void Start()
     {
         state = State.ready;
-        anim = GetComponent<Animator>();
+        anim = GetComponentInParent<Animator>();
+    }
+
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        BreakIfTrisAndReady(other);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(state == State.ready && other.gameObject.CompareTag(GameObject.Find("TRIS").tag))
+        BreakIfTrisAndReady(other);
+    }
+
+    void BreakIfTrisAndReady(Collider2D other)
+    {
+        if(state == State.ready && (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Brutus")))
         {
-            this.breaking();
+            GameObject tris = other.gameObject;
+            //PlayerMovement pm = tris.GetComponent<PlayerMovement>();
+            SpriteRenderer sr = tris.GetComponent<SpriteRenderer>();
+
+
+            //Debug.Log("Colisión con TRIS. inverted: " + );
+
+            if((tris.transform.position.y >= this.transform.position.y && !sr.flipY) 
+            || (tris.transform.position.y <= this.transform.position.y && sr.flipY)
+            )
+                this.breaking();
         }
     }
 
