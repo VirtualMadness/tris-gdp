@@ -7,6 +7,8 @@ public class DoDamage : MonoBehaviour {
 
     private GameObject player;
 
+    public bool destroyAfterDoingDamage = false;
+
 	// Use this for initialization
 	void Start () 
     {

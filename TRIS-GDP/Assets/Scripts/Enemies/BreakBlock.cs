@@ -34,7 +34,7 @@ public class BreakBlock : MonoBehaviour
 
     void BreakIfTrisAndReady(Collider2D other)
     {
-        if(state == State.ready && other.gameObject.CompareTag(GameObject.Find("TRIS").tag))
+        if(state == State.ready && (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Brutus")))
         {
             GameObject tris = other.gameObject;
             //PlayerMovement pm = tris.GetComponent<PlayerMovement>();

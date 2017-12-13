@@ -133,6 +133,4 @@ public class Brutus : MonoBehaviour
 			StartCoroutine(SmoothGridMoveCoroutine(movement, spd, true));
 		}
 	}
-
-
 }
