@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour {
 	bool grounded = false;
 	bool dead = false;
 	int gravityCoolDown = 0;
-	//Vector2 position;
+	int iFrames = 0;
 	Vector2 movement;
 	Animator anim;
 	Camera mainCam;
@@ -34,18 +34,24 @@ public class PlayerMovement : MonoBehaviour {
 		actualDevice = SystemInfo.deviceType;
 		Input.gyro.enabled = true;
 		mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-
+		actualCheckpoint = GameObject.FindGameObjectWithTag("StartCP").GetComponent<CheckPoint>();
+		
 		if(debug){
 			actualDevice = DeviceType.Handheld;
 		}
 	}
 	
 	// Update is called once per frame
-	void Update () {				
-		GetInput();
-		Action();		
-		CheckDeath();		
-		Move();
+	void Update () {
+		if(iFrames == 0){				
+			GetInput();
+			Action();		
+			CheckDeath();		
+			Move();
+		}
+		if(iFrames > 1 || (iFrames == 1 && Mathf.Abs(mainCam.transform.position.y - transform.position.y) <= mainCam.GetComponentInParent<PixelPerfectCamera>().getYOffset()-1)){
+			iFrames = iFrames-1 < 0? 0: iFrames-1;
+		}	
 
 		DrawDebug();
 	}
@@ -213,6 +219,10 @@ public class PlayerMovement : MonoBehaviour {
 		Time.timeScale = 1f;	
 		ResetPositionToActiveCheckpoint();
 		ManageSprite();
+		RepositionCamera();
+		GameObject.FindObjectOfType<LevelController>().ResetScene();
+		action = false;
+		iFrames = 30;
 	}
 	
 	private void ManageSprite(){

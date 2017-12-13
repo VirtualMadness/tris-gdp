@@ -40,13 +40,15 @@ public class BreakBlock : MonoBehaviour
 
     private void broken()
     {
-        this.gameObject.layer = Layer.IGNORE_RAYCAST;
+        //this.gameObject.layer = Layer.IGNORE_RAYCAST;
+        GetComponent<BoxCollider2D>().enabled = false;
         state = State.broken;
     }
 
     private void restored()
     {
-        this.gameObject.layer = Layer.GROUND;
+        //this.gameObject.layer = Layer.GROUND;
+        GetComponent<BoxCollider2D>().enabled = true;
         state = State.ready;
     }
 

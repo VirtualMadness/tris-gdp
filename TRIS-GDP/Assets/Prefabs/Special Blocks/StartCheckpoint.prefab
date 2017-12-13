@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 212535936301237168}
   m_Layer: 1
   m_Name: StartCheckpoint
-  m_TagString: Untagged
+  m_TagString: StartCP
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
